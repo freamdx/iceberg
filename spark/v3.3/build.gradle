@@ -89,6 +89,8 @@ project(":iceberg-spark:iceberg-spark-${sparkMajorVersion}_${scalaVersion}") {
       exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
+    compileOnly("org.apache.sedona:sedona-spark-shaded-3.0_${scalaVersion}:1.6.1")
+
     testImplementation(libs.hadoop2.minicluster) {
       exclude group: 'org.apache.avro', module: 'avro'
       // to make sure netty libs only come from
@@ -166,6 +168,8 @@ project(":iceberg-spark:iceberg-spark-extensions-${sparkMajorVersion}_${scalaVer
     testImplementation libs.avro.avro
     testImplementation libs.parquet.hadoop
     testImplementation libs.junit.vintage.engine
+
+    testImplementation("org.apache.sedona:sedona-spark-shaded-3.0_${scalaVersion}:1.6.1")
 
     // Required because we remove antlr plugin dependencies from the compile configuration, see note above
     runtimeOnly libs.antlr.runtime
