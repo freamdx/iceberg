@@ -72,6 +72,8 @@ public class TestEstimateOrcAvgWidthVisitor {
               required(24, "booleanField", Types.BooleanType.get()),
               optional(25, "date", Types.DateType.get()),
               optional(27, "timestamp", Types.TimestampType.withZone())));
+  protected static final Types.NestedField GEOM_FIELD =
+      optional(24, "geometry", Types.GeometryType.get());
 
   @Test
   public void testEstimateIntegerWidth() {
@@ -223,6 +225,16 @@ public class TestEstimateOrcAvgWidthVisitor {
     assertThat(estimateLength)
         .as("Estimated average length of the row must be 611.")
         .isEqualTo(611);
+  }
+
+  @Test
+  public void testEstimateGeometryWidth() {
+    Schema geomSchema = new Schema(GEOM_FIELD);
+    TypeDescription geomOrcSchema = ORCSchemaUtil.convert(geomSchema);
+    long estimateLength = getEstimateLength(geomOrcSchema);
+    assertThat(estimateLength)
+        .as("Estimated average length of geometry must be 128.")
+        .isEqualTo(128);
   }
 
   private Integer getEstimateLength(TypeDescription orcSchemaWithDate) {

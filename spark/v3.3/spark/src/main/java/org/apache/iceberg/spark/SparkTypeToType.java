@@ -155,4 +155,9 @@ class SparkTypeToType extends SparkTypeVisitor<Type> {
 
     throw new UnsupportedOperationException("Not a supported type: " + atomic.catalogString());
   }
+
+  @Override
+  public Type geometry(DataType type) {
+    return Types.GeometryType.get();
+  }
 }
