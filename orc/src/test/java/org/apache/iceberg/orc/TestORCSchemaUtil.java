@@ -57,8 +57,8 @@ public class TestORCSchemaUtil {
           required(34, "timestampCol", Types.TimestampType.withZone()),
           required(114, "dec_9_0", Types.DecimalType.of(9, 0)),
           required(115, "dec_11_2", Types.DecimalType.of(11, 2)),
-          required(116, "dec_38_10", Types.DecimalType.of(38, 10)) // spark's maximum precision
-          );
+          required(116, "dec_38_10", Types.DecimalType.of(38, 10)),
+          required(120, "geomCol", Types.GeometryType.get()));
 
   @Test
   public void testRoundtripConversionPrimitive() {

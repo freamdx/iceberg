@@ -224,7 +224,8 @@ public class TestParquetSchemaUtil {
                 "map_col_5",
                 Repetition.REQUIRED,
                 primitive(28, "k", PrimitiveTypeName.INT32, Repetition.REQUIRED),
-                primitive(29, "v", PrimitiveTypeName.INT32, Repetition.REQUIRED)));
+                primitive(29, "v", PrimitiveTypeName.INT32, Repetition.REQUIRED)),
+            primitive(30, "bin_col", PrimitiveTypeName.BINARY, Repetition.REQUIRED));
 
     Schema expectedSchema =
         new Schema(
@@ -255,8 +256,8 @@ public class TestParquetSchemaUtil {
             required(
                 27,
                 "map_col_5",
-                Types.MapType.ofRequired(
-                    28, 29, Types.IntegerType.get(), Types.IntegerType.get())));
+                Types.MapType.ofRequired(28, 29, Types.IntegerType.get(), Types.IntegerType.get())),
+            required(30, "bin_col", Types.BinaryType.get()));
 
     Schema actualSchema = ParquetSchemaUtil.convertAndPrune(messageType);
     assertThat(actualSchema.asStruct())

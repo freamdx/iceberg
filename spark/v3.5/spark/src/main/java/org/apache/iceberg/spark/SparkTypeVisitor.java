@@ -20,6 +20,7 @@ package org.apache.iceberg.spark;
 
 import java.util.List;
 import org.apache.iceberg.relocated.com.google.common.collect.Lists;
+import org.apache.spark.sql.sedona_sql.UDT.GeometryUDT;
 import org.apache.spark.sql.types.ArrayType;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.MapType;
@@ -48,6 +49,9 @@ class SparkTypeVisitor<T> {
     } else if (type instanceof ArrayType) {
       return visitor.array((ArrayType) type, visit(((ArrayType) type).elementType(), visitor));
 
+    } else if (type instanceof GeometryUDT) {
+      return visitor.geometry(type);
+
     } else if (type instanceof UserDefinedType) {
       throw new UnsupportedOperationException("User-defined types are not supported");
 
@@ -73,6 +77,10 @@ class SparkTypeVisitor<T> {
   }
 
   public T atomic(DataType atomic) {
+    return null;
+  }
+
+  public T geometry(DataType type) {
     return null;
   }
 }

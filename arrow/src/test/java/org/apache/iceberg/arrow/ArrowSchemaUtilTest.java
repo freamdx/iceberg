@@ -56,6 +56,7 @@ public class ArrowSchemaUtilTest {
   private static final String LIST_FIELD = "lt";
   private static final String MAP_FIELD = "mt";
   private static final String UUID_FIELD = "uu";
+  private static final String GEOM_FIELD = "geom";
 
   @Test
   public void convertPrimitive() {
@@ -79,7 +80,8 @@ public class ArrowSchemaUtilTest {
                 MAP_FIELD,
                 Types.MapType.ofOptional(15, 16, StringType.get(), IntegerType.get())),
             Types.NestedField.optional(17, FIXED_WIDTH_BINARY_FIELD, Types.FixedType.ofLength(10)),
-            Types.NestedField.optional(18, UUID_FIELD, Types.UUIDType.get()));
+            Types.NestedField.optional(18, UUID_FIELD, Types.UUIDType.get()),
+            Types.NestedField.optional(19, GEOM_FIELD, Types.GeometryType.get()));
 
     org.apache.arrow.vector.types.pojo.Schema arrow = ArrowSchemaUtil.convert(iceberg);
 
@@ -178,6 +180,10 @@ public class ArrowSchemaUtilTest {
       case UUID:
         assertThat(field.getName()).isEqualTo(UUID_FIELD);
         assertThat(arrowType.getTypeID()).isEqualTo(ArrowType.FixedSizeBinary.TYPE_TYPE);
+        break;
+      case GEOMETRY:
+        assertThat(field.getName()).isEqualTo(GEOM_FIELD);
+        assertThat(arrowType.getTypeID()).isEqualTo(ArrowType.Binary.TYPE_TYPE);
         break;
       default:
         throw new UnsupportedOperationException("Check not implemented for type: " + iceberg);
