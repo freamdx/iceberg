@@ -25,6 +25,7 @@ import org.apache.iceberg.relocated.com.google.common.collect.Lists;
 import org.apache.iceberg.types.Type;
 import org.apache.iceberg.types.TypeUtil;
 import org.apache.iceberg.types.Types;
+import org.apache.spark.sql.sedona_sql.UDT.GeometryUDT$;
 import org.apache.spark.sql.types.ArrayType$;
 import org.apache.spark.sql.types.BinaryType$;
 import org.apache.spark.sql.types.BooleanType$;
@@ -122,6 +123,11 @@ class TypeToSparkType extends TypeUtil.SchemaVisitor<DataType> {
         throw new UnsupportedOperationException(
             "Cannot convert unknown type to Spark: " + primitive);
     }
+  }
+
+  @Override
+  public DataType geometry(Type type) {
+    return GeometryUDT$.MODULE$;
   }
 
   private Metadata fieldMetadata(int fieldId) {

@@ -160,6 +160,10 @@ class OrcToIcebergVisitor extends OrcSchemaVisitor<Optional<Types.NestedField>> 
           case BINARY:
             foundField = Types.NestedField.of(icebergID, isOptional, name, Types.BinaryType.get());
             break;
+          case GEOMETRY:
+            foundField =
+                Types.NestedField.of(icebergID, isOptional, name, Types.GeometryType.get());
+            break;
           default:
             throw new IllegalStateException("Invalid Binary type found in ORC type attribute");
         }

@@ -55,6 +55,7 @@ public class Types {
           .put(StringType.get().toString(), StringType.get())
           .put(UUIDType.get().toString(), UUIDType.get())
           .put(BinaryType.get().toString(), BinaryType.get())
+          .put(GeometryType.get().toString().toLowerCase(Locale.ROOT), GeometryType.get())
           .buildOrThrow();
 
   private static final Pattern FIXED = Pattern.compile("fixed\\[\\s*(\\d+)\\s*\\]");
@@ -1051,6 +1052,24 @@ public class Types {
         this.fields = ImmutableList.of(keyField, valueField);
       }
       return fields;
+    }
+  }
+
+  public static class GeometryType extends PrimitiveType {
+    private static final GeometryType INSTANCE = new GeometryType();
+
+    public static GeometryType get() {
+      return INSTANCE;
+    }
+
+    @Override
+    public TypeID typeId() {
+      return TypeID.GEOMETRY;
+    }
+
+    @Override
+    public String toString() {
+      return "Geometry";
     }
   }
 }

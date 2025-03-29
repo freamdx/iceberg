@@ -17,6 +17,7 @@
  * under the License.
  */
 
+String sedonaVersion = '1.7.1'
 String sparkMajorVersion = '3.5'
 String scalaVersion = System.getProperty("scalaVersion") != null ? System.getProperty("scalaVersion") : System.getProperty("defaultScalaVersion")
 
@@ -76,6 +77,8 @@ project(":iceberg-spark:iceberg-spark-${sparkMajorVersion}_${scalaVersion}") {
       exclude group: 'io.netty', module: 'netty-common'
       exclude group: 'org.roaringbitmap'
     }
+
+    compileOnly("org.apache.sedona:sedona-spark-shaded-${sparkMajorVersion}_${scalaVersion}:${sedonaVersion}")
 
     implementation libs.parquet.column
     implementation libs.parquet.hadoop
@@ -177,6 +180,8 @@ project(":iceberg-spark:iceberg-spark-extensions-${sparkMajorVersion}_${scalaVer
     testImplementation libs.parquet.hadoop
     testImplementation libs.awaitility
 
+    testImplementation("org.apache.sedona:sedona-spark-shaded-${sparkMajorVersion}_${scalaVersion}:${sedonaVersion}")
+
     // Required because we remove antlr plugin dependencies from the compile configuration, see note above
     runtimeOnly libs.antlr.runtime
     antlr libs.antlr.antlr4
@@ -244,6 +249,9 @@ project(":iceberg-spark:iceberg-spark-runtime-${sparkMajorVersion}_${scalaVersio
     implementation (project(':iceberg-snowflake')) {
       exclude group: 'net.snowflake' , module: 'snowflake-jdbc'
     }
+
+    integrationImplementation("org.apache.sedona:sedona-spark-shaded-${sparkMajorVersion}_${scalaVersion}:${sedonaVersion}")
+    integrationImplementation("org.datasyslab:geotools-wrapper:${sedonaVersion}-28.5")
 
     integrationImplementation "org.scala-lang.modules:scala-collection-compat_${scalaVersion}:${libs.versions.scala.collection.compat.get()}"
     integrationImplementation "org.apache.spark:spark-hive_${scalaVersion}:${libs.versions.spark.hive35.get()}"

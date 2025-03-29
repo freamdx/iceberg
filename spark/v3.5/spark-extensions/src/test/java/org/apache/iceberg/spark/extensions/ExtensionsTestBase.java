@@ -28,7 +28,10 @@ import org.apache.iceberg.hive.TestHiveMetastore;
 import org.apache.iceberg.relocated.com.google.common.collect.ImmutableMap;
 import org.apache.iceberg.spark.CatalogTestBase;
 import org.apache.iceberg.spark.TestBase;
+import org.apache.sedona.core.serde.SedonaKryoRegistrator;
+import org.apache.sedona.sql.SedonaSqlExtensions;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.serializer.KryoSerializer;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.internal.SQLConf;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,7 +53,9 @@ public abstract class ExtensionsTestBase extends CatalogTestBase {
             .master("local[2]")
             .config("spark.testing", "true")
             .config(SQLConf.PARTITION_OVERWRITE_MODE().key(), "dynamic")
-            .config("spark.sql.extensions", IcebergSparkSessionExtensions.class.getName())
+            .config("spark.serializer", KryoSerializer.class.getName())
+            .config("spark.kryo.registrator", SedonaKryoRegistrator.class.getName())
+            .config("spark.sql.extensions", getExtensions())
             .config("spark.hadoop." + METASTOREURIS.varname, hiveConf.get(METASTOREURIS.varname))
             .config("spark.sql.shuffle.partitions", "4")
             .config("spark.sql.hive.metastorePartitionPruningFallbackOnException", "true")
@@ -66,5 +71,11 @@ public abstract class ExtensionsTestBase extends CatalogTestBase {
         (HiveCatalog)
             CatalogUtil.loadCatalog(
                 HiveCatalog.class.getName(), "hive", ImmutableMap.of(), hiveConf);
+  }
+
+  private static String getExtensions() {
+    return SedonaSqlExtensions.class.getName()
+        + ","
+        + IcebergSparkSessionExtensions.class.getName();
   }
 }

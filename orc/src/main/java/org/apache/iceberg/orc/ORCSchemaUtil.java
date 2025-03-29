@@ -40,7 +40,8 @@ public final class ORCSchemaUtil {
   public enum BinaryType {
     UUID,
     FIXED,
-    BINARY
+    BINARY,
+    GEOMETRY
   }
 
   public enum LongType {
@@ -101,6 +102,7 @@ public final class ORCSchemaUtil {
           .put(Type.TypeID.FIXED, TypeDescription.Category.BINARY)
           .put(Type.TypeID.BINARY, TypeDescription.Category.BINARY)
           .put(Type.TypeID.DECIMAL, TypeDescription.Category.DECIMAL)
+          .put(Type.TypeID.GEOMETRY, TypeDescription.Category.BINARY)
           .build();
 
   private ORCSchemaUtil() {}
@@ -202,6 +204,10 @@ public final class ORCSchemaUtil {
           orcType = TypeDescription.createMap(keyType, valueType);
           break;
         }
+      case GEOMETRY:
+        orcType = TypeDescription.createBinary();
+        orcType.setAttribute(ICEBERG_BINARY_TYPE_ATTRIBUTE, BinaryType.GEOMETRY.toString());
+        break;
       default:
         throw new IllegalArgumentException("Unhandled type " + type.typeId());
     }

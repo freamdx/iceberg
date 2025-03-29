@@ -615,6 +615,10 @@ public class TypeUtil {
     public T primitive(Type.PrimitiveType primitive) {
       return null;
     }
+
+    public T geometry(Type type) {
+      return null;
+    }
   }
 
   public static <T> T visit(Schema schema, SchemaVisitor<T> visitor) {
@@ -674,6 +678,9 @@ public class TypeUtil {
         }
 
         return visitor.map(map, keyResult, valueResult);
+
+      case GEOMETRY:
+        return visitor.geometry(type);
 
       default:
         return visitor.primitive(type.asPrimitiveType());
